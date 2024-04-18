@@ -23,10 +23,13 @@ createServer(async (request, response) => {
         return
     }
 
-    request.once('close', _ => console.log(`connection was closed!`, items))
 
     const csvArchive = './animeflv.csv';
     let items = 0
+    request.once("close", (_) =>
+        console.log(`connection was closed!`, items)
+    )
+
     await Readable.toWeb(createReadStream(csvArchive))
         // passo a passo que cada item individual vai trafegar
         .pipeThrough(Transform.toWeb(csvtojson()))
